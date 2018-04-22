@@ -35,4 +35,93 @@ class DetectMobileTest extends TestCase
             return $response;
         });
     }
+
+    /**
+     * Test sets field for mobile
+     *
+     * @return void
+     */
+    public function testSetsFieldForMobile()
+    {
+        $agent = m::mock('Jenssegers\Agent\Agent');
+        $agent->shouldReceive('isMobile')->once()->andReturn(true);
+        $session = m::mock('Illuminate\Contracts\Session\Session');
+        $session->shouldReceive('exists')
+                ->with('mobile')
+                ->once()
+                ->andReturn(false);
+        $session->shouldReceive('put')
+                ->with('mobile', true)
+                ->once();
+        $middleware = new DetectMobile($agent, $session);
+        $response = m::mock('Illuminate\Http\Response');
+        $response->shouldReceive('setVary')
+                 ->with('User-Agent')
+                 ->once()
+                 ->andReturn($response);
+        $request = Request::create('http://example.com/admin', 'GET');
+        $middleware->handle($request, function () use ($response) {
+            return $response;
+        });
+    }
+
+    /**
+     * Test sets field for tablet
+     *
+     * @return void
+     */
+    public function testSetsFieldForTablet()
+    {
+        $agent = m::mock('Jenssegers\Agent\Agent');
+        $agent->shouldReceive('isMobile')->once()->andReturn(false);
+        $agent->shouldReceive('isTablet')->once()->andReturn(true);
+        $session = m::mock('Illuminate\Contracts\Session\Session');
+        $session->shouldReceive('exists')
+                ->with('mobile')
+                ->once()
+                ->andReturn(false);
+        $session->shouldReceive('put')
+                ->with('mobile', true)
+                ->once();
+        $middleware = new DetectMobile($agent, $session);
+        $response = m::mock('Illuminate\Http\Response');
+        $response->shouldReceive('setVary')
+                 ->with('User-Agent')
+                 ->once()
+                 ->andReturn($response);
+        $request = Request::create('http://example.com/admin', 'GET');
+        $middleware->handle($request, function () use ($response) {
+            return $response;
+        });
+    }
+
+    /**
+     * Test sets field for desktop
+     *
+     * @return void
+     */
+    public function testSetsFieldForDesktop()
+    {
+        $agent = m::mock('Jenssegers\Agent\Agent');
+        $agent->shouldReceive('isMobile')->once()->andReturn(false);
+        $agent->shouldReceive('isTablet')->once()->andReturn(false);
+        $session = m::mock('Illuminate\Contracts\Session\Session');
+        $session->shouldReceive('exists')
+                ->with('mobile')
+                ->once()
+                ->andReturn(false);
+        $session->shouldReceive('put')
+                ->with('mobile', false)
+                ->once();
+        $middleware = new DetectMobile($agent, $session);
+        $response = m::mock('Illuminate\Http\Response');
+        $response->shouldReceive('setVary')
+                 ->with('User-Agent')
+                 ->once()
+                 ->andReturn($response);
+        $request = Request::create('http://example.com/admin', 'GET');
+        $middleware->handle($request, function () use ($response) {
+            return $response;
+        });
+    }
 }
