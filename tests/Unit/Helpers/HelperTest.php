@@ -38,4 +38,21 @@ class HelperTest extends TestCase
         $this->app->instance('Illuminate\Contracts\Session\Session', $session);
         $this->assertFalse(is_mobile());
     }
+
+    /**
+     * Test mobile helper returns false when not set
+     *
+     * @return void
+     */
+    public function testMobileHelperReturnsFalseWhenNotSet()
+    {
+        $session = m::mock('Illuminate\Contracts\Session\Session');
+        $session->shouldReceive('get')
+                ->with('mobile')
+                ->once()
+                ->andReturn(null);
+        $this->app->instance('Illuminate\Contracts\Session\Session', $session);
+        $this->assertFalse(is_mobile());
+    }
+
 }
