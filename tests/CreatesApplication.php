@@ -6,6 +6,11 @@ use Hash;
 
 trait CreatesApplication
 {
+	protected function getPackageProviders($app)
+	{
+		return ['Matthewbdaly\LaravelDynamicServing\Providers\LaravelDynamicServingServiceProvider'];
+	}
+
     /**
      * Creates the application.
      *
