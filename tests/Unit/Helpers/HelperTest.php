@@ -55,4 +55,51 @@ class HelperTest extends TestCase
         $this->assertFalse(is_mobile());
     }
 
+    /**
+     * Test desktop helper returns true
+     *
+     * @return void
+     */
+    public function testDesktopHelperReturnsTrue()
+    {
+        $session = m::mock('Illuminate\Contracts\Session\Session');
+        $session->shouldReceive('get')
+                ->with('mobile')
+                ->once()
+                ->andReturn(false);
+        $this->app->instance('Illuminate\Contracts\Session\Session', $session);
+        $this->assertTrue(is_desktop());
+    }
+
+    /**
+     * Test desktop helper returns false
+     *
+     * @return void
+     */
+    public function testDesktopHelperReturnsFalse()
+    {
+        $session = m::mock('Illuminate\Contracts\Session\Session');
+        $session->shouldReceive('get')
+                ->with('mobile')
+                ->once()
+                ->andReturn(true);
+        $this->app->instance('Illuminate\Contracts\Session\Session', $session);
+        $this->assertFalse(is_desktop());
+    }
+
+    /**
+     * Test desktop helper returns true when not set
+     *
+     * @return void
+     */
+    public function testDesktopHelperReturnsTrueWhenNotSet()
+    {
+        $session = m::mock('Illuminate\Contracts\Session\Session');
+        $session->shouldReceive('get')
+                ->with('mobile')
+                ->once()
+                ->andReturn(null);
+        $this->app->instance('Illuminate\Contracts\Session\Session', $session);
+        $this->assertTrue(is_desktop());
+    }
 }
